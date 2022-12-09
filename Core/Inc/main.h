@@ -77,8 +77,6 @@ void Error_Handler(void);
 #define USARTx_TX_GPIO_Port GPIOB
 #define DBG2_Pin GPIO_PIN_10
 #define DBG2_GPIO_Port GPIOB
-#define RF_CTRL1_Pin GPIO_PIN_4
-#define RF_CTRL1_GPIO_Port GPIOA
 #define RF_CTRL2_Pin GPIO_PIN_5
 #define RF_CTRL2_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
