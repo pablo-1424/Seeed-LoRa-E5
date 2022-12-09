@@ -20,6 +20,7 @@
 #include "main.h"
 #include "app_lorawan.h"
 #include "gpio.h"
+//#include "usart.c"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -87,7 +88,13 @@ int main(void)
   MX_GPIO_Init();
   MX_LoRaWAN_Init();
   /* USER CODE BEGIN 2 */
+  //For the trying bellow
+  uint8_t MSG[1] = {'\0'};
+  //uint8_t X = 0;
+  extern IRDA_HandleTypeDef hirda1;
 
+  //MX_USART2_UART_Init();
+  MX_USART1_IRDA_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -95,8 +102,12 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    MX_LoRaWAN_Process();
+    //MX_LoRaWAN_Process();
 
+    //Trying to send a message on IrDA
+    sprintf(MSG, "A");
+    HAL_IRDA_Transmit(&hirda1, MSG, sizeof(MSG), 100);
+    HAL_Delay(1);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
