@@ -1,5 +1,9 @@
-LoRaWAN/Target/radio_board_if.o: ../LoRaWAN/Target/radio_board_if.c \
- ../LoRaWAN/Target/radio_board_if.h ../Core/Inc/platform.h \
+Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_irda.o: \
+ ../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_irda.c \
+ ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal.h \
+ ../Core/Inc/stm32wlxx_hal_conf.h \
+ ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_dma.h \
+ ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_def.h \
  ../Drivers/CMSIS/Device/ST/STM32WLxx/Include/stm32wlxx.h \
  ../Drivers/CMSIS/Device/ST/STM32WLxx/Include/stm32wle5xx.h \
  ../Drivers/CMSIS/Include/core_cm4.h \
@@ -8,10 +12,6 @@ LoRaWAN/Target/radio_board_if.o: ../LoRaWAN/Target/radio_board_if.c \
  ../Drivers/CMSIS/Include/cmsis_gcc.h \
  ../Drivers/CMSIS/Include/mpu_armv7.h \
  ../Drivers/CMSIS/Device/ST/STM32WLxx/Include/system_stm32wlxx.h \
- ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal.h \
- ../Core/Inc/stm32wlxx_hal_conf.h \
- ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_dma.h \
- ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_def.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_dma.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_dmamux.h \
@@ -41,15 +41,11 @@ LoRaWAN/Target/radio_board_if.o: ../LoRaWAN/Target/radio_board_if.c \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_spi.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_uart.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_uart_ex.h \
- ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h \
- ../Core/Inc/main.h \
- ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h \
- ../Core/Inc/stm32wlxx_nucleo_conf.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h
-../LoRaWAN/Target/radio_board_if.h:
-../Core/Inc/platform.h:
+ ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal.h:
+../Core/Inc/stm32wlxx_hal_conf.h:
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_dma.h:
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_def.h:
 ../Drivers/CMSIS/Device/ST/STM32WLxx/Include/stm32wlxx.h:
 ../Drivers/CMSIS/Device/ST/STM32WLxx/Include/stm32wle5xx.h:
 ../Drivers/CMSIS/Include/core_cm4.h:
@@ -58,10 +54,6 @@ LoRaWAN/Target/radio_board_if.o: ../LoRaWAN/Target/radio_board_if.c \
 ../Drivers/CMSIS/Include/cmsis_gcc.h:
 ../Drivers/CMSIS/Include/mpu_armv7.h:
 ../Drivers/CMSIS/Device/ST/STM32WLxx/Include/system_stm32wlxx.h:
-../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal.h:
-../Core/Inc/stm32wlxx_hal_conf.h:
-../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_dma.h:
-../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_def.h:
 ../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h:
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_dma.h:
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_dmamux.h:
@@ -92,9 +84,3 @@ LoRaWAN/Target/radio_board_if.o: ../LoRaWAN/Target/radio_board_if.c \
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_uart.h:
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_uart_ex.h:
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:
-../Core/Inc/main.h:
-../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h:
-../Core/Inc/stm32wlxx_nucleo_conf.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h:
