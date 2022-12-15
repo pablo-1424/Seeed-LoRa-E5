@@ -131,7 +131,7 @@ void HAL_IRDA_MspInit(IRDA_HandleTypeDef* irdaHandle)
     PB7     ------> USART1_RX
     PB6     ------> USART1_TX
     */
-    GPIO_InitStruct.Pin = USARTx_RX_Pin|USARTx_TX_Pin;
+    GPIO_InitStruct.Pin = RX_IrDA_Pin|USARTx_TX_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -242,7 +242,7 @@ void HAL_IRDA_MspDeInit(IRDA_HandleTypeDef* irdaHandle)
     PB7     ------> USART1_RX
     PB6     ------> USART1_TX
     */
-    HAL_GPIO_DeInit(GPIOB, USARTx_RX_Pin|USARTx_TX_Pin);
+    HAL_GPIO_DeInit(GPIOB, RX_IrDA_Pin|USARTx_TX_Pin);
 
     /* USART1 DMA DeInit */
     HAL_DMA_DeInit(irdaHandle->hdmatx);
