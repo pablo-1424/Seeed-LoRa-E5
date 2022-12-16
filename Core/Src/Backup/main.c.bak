@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "sys_app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,14 +101,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	for(uint8_t i = 0; i<6; i++){
-	  HAL_Delay(200);
-	  sprintf(MSG, "A\r");
-	  HAL_IRDA_Transmit(&hirda1, MSG, sizeof(MSG), 100);
-	}
+		for(uint8_t i = 0; i<6; i++){
+		  HAL_Delay(500);
+		  sprintf(MSG, "A\r");
+		  HAL_IRDA_Transmit(&hirda1, MSG, sizeof(MSG), 100);
+		}
 
-	HAL_IRDA_Receive(&hirda1, MSG_ret, sizeof(MSG_ret), 100);
-	APP_LOG(TS_ON,VLEVEL_M,"%d\r\n", MSG_ret);
+	    //HAL_IRDA_Receive(&hirda1, MSG_ret, sizeof(MSG_ret), 100);
+	    //APP_LOG(TS_ON,VLEVEL_M,"%d\r\n", MSG_ret);
     /* USER CODE END WHILE */
     MX_LoRaWAN_Process();
 

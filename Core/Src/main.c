@@ -20,12 +20,10 @@
 #include "main.h"
 #include "app_lorawan.h"
 #include "gpio.h"
-#include "sys_app.h"
-//#include "usart.c"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "sys_app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +43,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t Rx_Data[10];
+extern IRDA_HandleTypeDef hirda1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,10 +92,11 @@ int main(void)
   uint8_t MSG[2] = {'\0'};
   uint8_t MSG_ret[12];
   //uint8_t X = 0;
-  extern IRDA_HandleTypeDef hirda1;
+
 
   //MX_USART2_UART_Init();
   MX_USART1_IRDA_Init();
+  //HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET)
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,20 +104,19 @@ int main(void)
   while (1)
   {
 		for(uint8_t i = 0; i<6; i++){
-		  HAL_Delay(200);
+		  HAL_Delay(500);
 		  sprintf(MSG, "A\r");
 		  HAL_IRDA_Transmit(&hirda1, MSG, sizeof(MSG), 100);
 		}
 
-	    HAL_IRDA_Receive(&hirda1, MSG_ret, sizeof(MSG_ret), 100);
-	    APP_LOG(TS_ON,VLEVEL_M,"%d\r\n", MSG_ret);
+	    //HAL_IRDA_Receive(&hirda1, MSG_ret, sizeof(MSG_ret), 100);
+	    //APP_LOG(TS_ON,VLEVEL_M,"%d\r\n", MSG_ret);
     /* USER CODE END WHILE */
     //MX_LoRaWAN_Process();
 
-    //Trying to send a message on IrDA
-
-
     /* USER CODE BEGIN 3 */
+		sprintf(MSG, Rx_Data[1]);
+		HAL_IRDA_Transmit(&hirda1, MSG, sizeof(MSG), 100);
   }
   /* USER CODE END 3 */
 }
@@ -171,7 +170,9 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_IRDA_RxCpltCallback(IRDA_HandleTypeDef *hirda){
+	HAL_IRDA_Receive_IT(&hirda1, Rx_Data, 4 );
+}
 /* USER CODE END 4 */
 
 /**
