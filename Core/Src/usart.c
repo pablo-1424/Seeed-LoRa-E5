@@ -46,7 +46,7 @@ void MX_USART1_IRDA_Init(void)
   hirda1.Init.WordLength = IRDA_WORDLENGTH_8B;
   hirda1.Init.Parity = IRDA_PARITY_NONE;
   hirda1.Init.Mode = IRDA_MODE_TX_RX;
-  hirda1.Init.Prescaler = 10;
+  hirda1.Init.Prescaler = 1;
   hirda1.Init.PowerMode = IRDA_POWERMODE_NORMAL;
   hirda1.Init.ClockPrescaler = IRDA_PRESCALER_DIV1;
   if (HAL_IRDA_Init(&hirda1) != HAL_OK)

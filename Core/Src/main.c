@@ -69,7 +69,7 @@ uint8_t IRDA_Receive(IRDA_HandleTypeDef hirda) {
 	uint8_t reception[1];
 
 	// Wait for 10 ms to see if anything else has been sent
-	switch (HAL_IRDA_Receive(&hirda, reception, sizeof(reception), 10)) {
+	switch (HAL_IRDA_Receive(&hirda, reception, sizeof(reception), 20)) {
 		case HAL_OK: {
 			rxBuffer[rxPointer++] = reception[0];
 			break;
@@ -116,8 +116,8 @@ uint16_t IRDA_checksum(uint8_t receiveString[], uint8_t size) {
 	uint8_t message1[] = {checksumCalculated >> 8, checksumCalculated};
 	uint8_t message2[] = {checksum >> 8, checksum};
 
-	HAL_IRDA_Transmit(&hirda1, message1, 2, 50);
-	HAL_IRDA_Transmit(&hirda1, message2, 2, 50);
+	//HAL_IRDA_Transmit(&hirda1, message1, 2, 50);
+	//HAL_IRDA_Transmit(&hirda1, message2, 2, 50);
 
 	return checksum << 8 | checksumCalculated;
 }
@@ -178,6 +178,8 @@ int main(void)
 
 			strncpy(receiveString, rxBuffer, rxPointer);
 
+			//HAL_IRDA_Transmit(&hirda1, receiveString, rxPointer, 50);
+
 			// If message contains checksum
 			if (strstr(receiveString, "K23") != NULL) {
 				uint32_t result = IRDA_checksum(receiveString, rxPointer);
@@ -198,6 +200,8 @@ int main(void)
 				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
 
 				message = MESSAGE_START;
+
+				rxPointer = 0;
 			} else if (!strcmp(receiveString, "*\r")) {
 				// Acknowledge that there is a send request ("S")
 				if (message == MESSAGE_START) {
@@ -243,6 +247,9 @@ int main(void)
 				/*
 				 * Not awaited reception handling goes here
 				 */
+				if (rxPointer != 0) {
+
+				}
 			}
 
 			/*
@@ -252,16 +259,15 @@ int main(void)
 
 			rxPointer = 0;
 		}
-
+	}
 		//APP_LOG(TS_ON,VLEVEL_M,"%d\r\n", MSG_ret);
 
-		/* USER CODE END WHILE */
-		//MX_LoRaWAN_Process();
-	}
+    /* USER CODE END WHILE */
+    MX_LoRaWAN_Process();
 
     /* USER CODE BEGIN 3 */
 
-	/* USER CODE END 3 */
+  /* USER CODE END 3 */
 }
 
 /**
