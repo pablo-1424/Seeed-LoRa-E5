@@ -37,7 +37,7 @@
 #include "flash_if.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "string.h"
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -101,7 +101,7 @@ static const char *slotStrings[] = { "1", "2", "C", "C_MC", "P", "P_MC" };
 /**
   * @brief  LoRa End Node send request
   */
-void SendTxData(void);
+void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterSalinity[], char waterTDS[], char batteyLevel[]);
 
 /**
   * @brief  TX timer callback function
@@ -519,30 +519,62 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
   /* USER CODE END OnRxData_1 */
 }
 
-void SendTxData(void)
+void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterSalinity[], char waterTDS[], char batteyLevel[])
 {
-  /* USER CODE BEGIN SendTxData_1 */
-  LmHandlerErrorStatus_t status = LORAMAC_HANDLER_ERROR;
-  uint8_t batteryLevel = GetBatteryLevel();
-  uint8_t rxPointer = 0;
-  char rxBuffer[256] = {'\0'};
+	/* USER CODE BEGIN SendTxData_1 */
+	LmHandlerErrorStatus_t status = LORAMAC_HANDLER_ERROR;
+	uint8_t batteryLevel = GetBatteryLevel();
+	uint8_t dataCounter = 0;
+	uint8_t bufferLength = 114;
+	uint8_t ptrBuffer = 0;
 
-  APP_LOG(TS_ON, VLEVEL_M, "VDDA: %d\r\n", batteryLevel);
+	char waterLevel_[bufferLength] = strncpy(waterLevel_, waterLevel, bufferLength);  /* Save all data buffer */
+	char waterTemp_[bufferLength] = strncpy(waterTemp_, waterTemp, bufferLength);
+	char waterEC_[bufferLength] = strncpy(waterEC_, waterEC, bufferLength);
+	char waterSalinity_[bufferLength] = strncpy(waterSalinity_, waterSalinity, bufferLength);
+	char waterTDS_[bufferLength] = strncpy(waterTDS_, waterTDS, bufferLength);
+	char batteyLevel_[bufferLength] = strncpy(batteyLevel_, batteyLevel, bufferLength);
+
+	/* DATE in format ddmmyy */
+	ptrBuffer = strstr(waterLevel_, "K28");		/* Get date */
+	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+
+	/* TIME in format hhmmss */
+	ptrBuffer = strstr(waterLevel_, "K22");		/* Get time */
+	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+
+	/* WATER LEVEL - sending command and data */
+	ptrBuffer = strstr(waterLevel_, "K22");		/* Get time */
+	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
 
 
-  AppData.Port = LORAWAN_USER_APP_PORT;
-  AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
+	//APP_LOG(TS_ON, VLEVEL_M, "VDDA: %d\r\n", batteryLevel);
 
-  AppData.BufferSize = i;
+	AppData.Port = LORAWAN_USER_APP_PORT;
+	//AppData.Buffer[dataCounter++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
 
-  if ((JoinLedTimer.IsRunning) && (LmHandlerJoinStatus() == LORAMAC_HANDLER_SET))
-  {
-    UTIL_TIMER_Stop(&JoinLedTimer);
-  }
+	AppData.BufferSize = dataCounter;
 
-  status = LmHandlerSend(&AppData, LmHandlerParams.IsTxConfirmed, false);
+	if ((JoinLedTimer.IsRunning) && (LmHandlerJoinStatus() == LORAMAC_HANDLER_SET))
+	{
+		UTIL_TIMER_Stop(&JoinLedTimer);
+	}
 
-  /* USER CODE END SendTxData_1 */
+	status = LmHandlerSend(&AppData, LmHandlerParams.IsTxConfirmed, false);
+
+	/* USER CODE END SendTxData_1 */
 }
 
 static void OnTxTimerEvent(void *context)
