@@ -1,3 +1,16 @@
+/!\ When the code is re-generated, you need to erase the following lines code:
+lora_app.c:
+      In LoRaWAN_Init:
+            UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendTxData);
+            UTIL_TIMER_Create(&TxTimer, TxPeriodicity, UTIL_TIMER_ONESHOT, OnTxTimerEvent, NULL);
+            UTIL_TIMER_Start(&TxTimer);
+                  You can erase the entire if/else
+      In OnTxTimerEvent:
+            UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+            UTIL_TIMER_Start(&TxTimer);
+
+
+
 # Seeed-LoRa-E5
 LoRaWAN end node built from scratch using STM32CubeIDE/CubeMX for the LoRa-E5 WLE5x
 
@@ -75,4 +88,3 @@ and
 <img width="613" alt="image" src="https://user-images.githubusercontent.com/942815/145850066-bbd75cbc-b373-4332-898d-0140b003da20.png">
 
 - This creates a new "End client framework" project with no user code (such as contained in the repo code) included. You'll want to refer to the repo code and ST documentation for using their LoRaWAN stack.
-
