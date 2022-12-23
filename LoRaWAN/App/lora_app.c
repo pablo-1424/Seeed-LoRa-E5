@@ -528,15 +528,8 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	uint8_t bufferLength = 114;
 	uint8_t ptrBuffer = 0;
 
-	char waterLevel_[bufferLength] = strncpy(waterLevel_, waterLevel, bufferLength);  /* Save all data buffer */
-	char waterTemp_[bufferLength] = strncpy(waterTemp_, waterTemp, bufferLength);
-	char waterEC_[bufferLength] = strncpy(waterEC_, waterEC, bufferLength);
-	char waterSalinity_[bufferLength] = strncpy(waterSalinity_, waterSalinity, bufferLength);
-	char waterTDS_[bufferLength] = strncpy(waterTDS_, waterTDS, bufferLength);
-	char batteyLevel_[bufferLength] = strncpy(batteyLevel_, batteyLevel, bufferLength);
-
 	/* DATE in format ddmmyy */
-	ptrBuffer = strstr(waterLevel_, "K28");			/* K28 is for date */
+	ptrBuffer = strstr(waterLevel, "K28");			/* K28 is for date */
 	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -544,7 +537,7 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	}
 
 	/* TIME in format hhmmss */
-	ptrBuffer = strstr(waterLevel_, "K22");			/* K22 is for time */
+	ptrBuffer = strstr(waterLevel, "K22");			/* K22 is for time */
 	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -552,13 +545,13 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	}
 
 	/* WATER LEVEL - sending command and data */
-	ptrBuffer = strstr(waterLevel_, "K06");			/* K06 is for command */
+	ptrBuffer = strstr(waterLevel, "K06");			/* K06 is for command */
 	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
 		}
 	}
-	ptrBuffer = strstr(waterLevel_, "K20");			/* K20 is for data */
+	ptrBuffer = strstr(waterLevel, "K20");			/* K20 is for data */
 	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -566,13 +559,13 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	}
 
 	/* WATER TEMP - sending command and data */
-	ptrBuffer = strstr(waterTemp_, "K06");			/* K06 is for command */
+	ptrBuffer = strstr(waterTemp, "K06");			/* K06 is for command */
 	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
 		}
 	}
-	ptrBuffer = strstr(waterTemp_, "K20");			/* K20 is for data */
+	ptrBuffer = strstr(waterTemp, "K20");			/* K20 is for data */
 	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -580,13 +573,13 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	}
 
 	/* WATER EC - sending command and data */
-	ptrBuffer = strstr(waterEC_, "K06");			/* K06 is for command */
+	ptrBuffer = strstr(waterEC, "K06");			/* K06 is for command */
 	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
 		}
 	}
-	ptrBuffer = strstr(waterEC_, "K20");			/* K20 is for data */
+	ptrBuffer = strstr(waterEC, "K20");			/* K20 is for data */
 	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -594,13 +587,13 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	}
 
 	/* WATER SALINITY - sending command and data */
-	ptrBuffer = strstr(waterSalinity_, "K06");			/* K06 is for command */
+	ptrBuffer = strstr(waterSalinity, "K06");			/* K06 is for command */
 	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
 		}
 	}
-	ptrBuffer = strstr(waterSalinity_, "K20");			/* K20 is for data */
+	ptrBuffer = strstr(waterSalinity, "K20");			/* K20 is for data */
 	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -608,13 +601,13 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	}
 
 	/* WATER SALINITY - sending command and data */
-	ptrBuffer = strstr(waterTDS_, "K06");			/* K06 is for command */
+	ptrBuffer = strstr(waterTDS, "K06");			/* K06 is for command */
 	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
 		}
 	}
-	ptrBuffer = strstr(waterTDS_, "K20");			/* K20 is for data */
+	ptrBuffer = strstr(waterTDS, "K20");			/* K20 is for data */
 	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -622,13 +615,13 @@ uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char wat
 	}
 
 	/* BATTERY LEVEL - sending command and data */
-	ptrBuffer = strstr(batteyLevel_, "K06");			/* K06 is for command */
+	ptrBuffer = strstr(batteyLevel, "K06");			/* K06 is for command */
 	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
 		}
 	}
-	ptrBuffer = strstr(batteyLevel_, "K20");			/* K20 is for data */
+	ptrBuffer = strstr(batteyLevel, "K20");			/* K20 is for data */
 	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
