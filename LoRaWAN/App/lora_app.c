@@ -101,7 +101,7 @@ static const char *slotStrings[] = { "1", "2", "C", "C_MC", "P", "P_MC" };
 /**
   * @brief  LoRa End Node send request
   */
-void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterSalinity[], char waterTDS[], char batteyLevel[]);
+uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterSalinity[], char waterTDS[], char batteyLevel[]);
 
 /**
   * @brief  TX timer callback function
@@ -519,7 +519,7 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
   /* USER CODE END OnRxData_1 */
 }
 
-void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterSalinity[], char waterTDS[], char batteyLevel[])
+uint8_t SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterSalinity[], char waterTDS[], char batteyLevel[])
 {
 	/* USER CODE BEGIN SendTxData_1 */
 	LmHandlerErrorStatus_t status = LORAMAC_HANDLER_ERROR;
@@ -536,7 +536,7 @@ void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterS
 	char batteyLevel_[bufferLength] = strncpy(batteyLevel_, batteyLevel, bufferLength);
 
 	/* DATE in format ddmmyy */
-	ptrBuffer = strstr(waterLevel_, "K28");		/* Get date */
+	ptrBuffer = strstr(waterLevel_, "K28");			/* K28 is for date */
 	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -544,7 +544,7 @@ void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterS
 	}
 
 	/* TIME in format hhmmss */
-	ptrBuffer = strstr(waterLevel_, "K22");		/* Get time */
+	ptrBuffer = strstr(waterLevel_, "K22");			/* K22 is for time */
 	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
@@ -552,8 +552,84 @@ void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterS
 	}
 
 	/* WATER LEVEL - sending command and data */
-	ptrBuffer = strstr(waterLevel_, "K22");		/* Get time */
-	for(int i = 4; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+	ptrBuffer = strstr(waterLevel_, "K06");			/* K06 is for command */
+	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+	ptrBuffer = strstr(waterLevel_, "K20");			/* K20 is for data */
+	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+
+	/* WATER TEMP - sending command and data */
+	ptrBuffer = strstr(waterTemp_, "K06");			/* K06 is for command */
+	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+	ptrBuffer = strstr(waterTemp_, "K20");			/* K20 is for data */
+	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+
+	/* WATER EC - sending command and data */
+	ptrBuffer = strstr(waterEC_, "K06");			/* K06 is for command */
+	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+	ptrBuffer = strstr(waterEC_, "K20");			/* K20 is for data */
+	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+
+	/* WATER SALINITY - sending command and data */
+	ptrBuffer = strstr(waterSalinity_, "K06");			/* K06 is for command */
+	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+	ptrBuffer = strstr(waterSalinity_, "K20");			/* K20 is for data */
+	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+
+	/* WATER SALINITY - sending command and data */
+	ptrBuffer = strstr(waterTDS_, "K06");			/* K06 is for command */
+	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+	ptrBuffer = strstr(waterTDS_, "K20");			/* K20 is for data */
+	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+
+	/* BATTERY LEVEL - sending command and data */
+	ptrBuffer = strstr(batteyLevel_, "K06");			/* K06 is for command */
+	for(int i = 10; i <= 11; i++){					/* Checking all date character and put in sender buffer */
+		if(ptrBuffer != ' '){
+			AppData.Buffer[dataCounter++] = ptrBuffer+i;
+		}
+	}
+	ptrBuffer = strstr(batteyLevel_, "K20");			/* K20 is for data */
+	for(int i = 11; i <= 17; i++){					/* Checking all date character and put in sender buffer */
 		if(ptrBuffer != ' '){
 			AppData.Buffer[dataCounter++] = ptrBuffer+i;
 		}
@@ -567,12 +643,14 @@ void SendTxData(char waterLevel[], char waterTemp[], char waterEC[], char waterS
 
 	AppData.BufferSize = dataCounter;
 
-	if ((JoinLedTimer.IsRunning) && (LmHandlerJoinStatus() == LORAMAC_HANDLER_SET))
+	/*if ((JoinLedTimer.IsRunning) && (LmHandlerJoinStatus() == LORAMAC_HANDLER_SET))
 	{
 		UTIL_TIMER_Stop(&JoinLedTimer);
-	}
+	}*/
 
-	status = LmHandlerSend(&AppData, LmHandlerParams.IsTxConfirmed, false);
+	status = LmHandlerSend(&AppData, LmHandlerParams.IsTxConfirmed, false);		/* Send data */
+
+	return status;		/* return 0 if sending is successfull */
 
 	/* USER CODE END SendTxData_1 */
 }
