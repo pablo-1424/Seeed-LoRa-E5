@@ -314,6 +314,21 @@ void SUBGHZ_Radio_IRQHandler(void)
   /* USER CODE END SUBGHZ_Radio_IRQn 1 */
 }
 
+/**
+  * @brief This function handles DMAMUX1 overrun Interrupt.
+  */
+void DMAMUX1_OVR_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMAMUX1_OVR_IRQn 0 */
+
+  /* USER CODE END DMAMUX1_OVR_IRQn 0 */
+  // Handle DMA1_Channel1
+  HAL_DMAEx_MUX_IRQHandler(&hdma_usart1_tx);
+  /* USER CODE BEGIN DMAMUX1_OVR_IRQn 1 */
+
+  /* USER CODE END DMAMUX1_OVR_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

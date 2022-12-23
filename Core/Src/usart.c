@@ -107,6 +107,7 @@ void HAL_IRDA_MspInit(IRDA_HandleTypeDef* irdaHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  HAL_DMA_MuxSyncConfigTypeDef pSyncConfig= {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
   if(irdaHandle->Instance==USART1)
   {
@@ -138,6 +139,8 @@ void HAL_IRDA_MspInit(IRDA_HandleTypeDef* irdaHandle)
     GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+    __HAL_SYSCFG_FASTMODEPLUS_ENABLE(SYSCFG_FASTMODEPLUS_PB7);
+
     /* USART1 DMA Init */
     /* USART1_TX Init */
     hdma_usart1_tx.Instance = DMA1_Channel1;
@@ -150,6 +153,16 @@ void HAL_IRDA_MspInit(IRDA_HandleTypeDef* irdaHandle)
     hdma_usart1_tx.Init.Mode = DMA_NORMAL;
     hdma_usart1_tx.Init.Priority = DMA_PRIORITY_LOW;
     if (HAL_DMA_Init(&hdma_usart1_tx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_EXTI0;
+    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_NO_EVENT;
+    pSyncConfig.SyncEnable = DISABLE;
+    pSyncConfig.EventEnable = ENABLE;
+    pSyncConfig.RequestNumber = 1;
+    if (HAL_DMAEx_ConfigMuxSync(&hdma_usart1_tx, &pSyncConfig) != HAL_OK)
     {
       Error_Handler();
     }

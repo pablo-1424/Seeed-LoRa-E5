@@ -43,10 +43,10 @@ Core/Src/sys_sensors.o: ../Core/Src/sys_sensors.c ../Core/Inc/platform.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h \
  ../Core/Inc/main.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h \
+ C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h \
+ C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h \
  ../Core/Inc/stm32wlxx_nucleo_conf.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h \
+ C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h \
  ../Core/Inc/sys_conf.h ../Core/Inc/sys_sensors.h ../Core/Inc/adc_if.h \
  ../Core/Inc/adc.h ../Core/Inc/platform.h
 ../Core/Inc/platform.h:
@@ -94,10 +94,10 @@ Core/Src/sys_sensors.o: ../Core/Src/sys_sensors.c ../Core/Inc/platform.h \
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h:
+C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h:
+C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h:
 ../Core/Inc/stm32wlxx_nucleo_conf.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h:
+C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h:
 ../Core/Inc/sys_conf.h:
 ../Core/Inc/sys_sensors.h:
 ../Core/Inc/adc_if.h:

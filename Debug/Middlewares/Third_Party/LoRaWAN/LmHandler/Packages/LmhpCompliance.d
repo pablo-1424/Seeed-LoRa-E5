@@ -45,10 +45,10 @@ Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpCompliance.o: \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h \
  ../Core/Inc/main.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h \
+ C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h \
+ C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h \
  ../Core/Inc/stm32wlxx_nucleo_conf.h \
- C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h \
+ C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h \
  ../Middlewares/Third_Party/LoRaWAN/LmHandler/NvmDataMgmt.h \
  ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.h \
  ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacInterfaces.h \
@@ -121,10 +121,10 @@ Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpCompliance.o: \
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h:
+C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.h:
+C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_errno.h:
 ../Core/Inc/stm32wlxx_nucleo_conf.h:
-C:/work/Seeed-LoRa-E5/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h:
+C:/Users/johnb/Documents/GitHub/Seeed-LoRa-E5-Test/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.h:
 ../Middlewares/Third_Party/LoRaWAN/LmHandler/NvmDataMgmt.h:
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.h:
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacInterfaces.h:

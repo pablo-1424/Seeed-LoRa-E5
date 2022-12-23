@@ -15,3 +15,4 @@
 ../Core/Src/stm32wlxx_it.c:278:6:EXTI15_10_IRQHandler	8	static
 ../Core/Src/stm32wlxx_it.c:292:6:RTC_Alarm_IRQHandler	8	static
 ../Core/Src/stm32wlxx_it.c:306:6:SUBGHZ_Radio_IRQHandler	8	static
+../Core/Src/stm32wlxx_it.c:320:6:DMAMUX1_OVR_IRQHandler	8	static

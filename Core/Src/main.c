@@ -23,7 +23,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "sys_app.h"
+#include "string.h"
+#include "stm32_timer.h"
+#include "lora_app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,6 +35,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define MESSAGE_WAKE_UP 0
+#define MESSAGE_START 1
+#define MESSAGE_END 2
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,8 +49,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t Rx_Data[10];
+uint8_t rxPointer = 0;
+char rxBuffer[256] = {'\0'};
+
 extern IRDA_HandleTypeDef hirda1;
+
+static UTIL_TIMER_Object_t wakeUpSendTimer;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,7 +65,62 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint8_t IRDA_Receive(IRDA_HandleTypeDef hirda) {
+	uint8_t reception[1];
 
+	// Wait for 10 ms to see if anything else has been sent
+	switch (HAL_IRDA_Receive(&hirda, reception, sizeof(reception), 10)) {
+		case HAL_OK: {
+			rxBuffer[rxPointer++] = reception[0];
+			break;
+		};
+		case HAL_BUSY: {
+			HAL_Delay(5);
+			break;
+		};
+		case HAL_ERROR: {
+			break;
+		};
+		// Reception is complete
+		case HAL_TIMEOUT: {
+			return 1;
+		};
+	}
+
+	return 0;
+}
+
+// Send "A\r"
+void IRDA_Transmit_Wake_Up(void) {
+	uint8_t messageSend[] = "A\r";
+
+	HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+}
+
+uint16_t IRDA_checksum(uint8_t receiveString[], uint8_t size) {
+	//receiveString
+	// Get checksum from message (convert from ASCII to binary)¨
+	uint16_t checksum = (((uint16_t) receiveString[size - 7]) - 0x0030) * 1000;
+	checksum += (((uint16_t) receiveString[size - 6]) - 0x0030) * 100;
+	checksum += (((uint16_t) receiveString[size - 5]) - 0x0030) * 10;
+	checksum += ((uint16_t) receiveString[size - 4]) - 0x0030;
+
+	uint16_t checksumCalculated = 0;
+
+	for (uint8_t i = 0; i < size - 10; i++) {
+		checksumCalculated += receiveString[i];
+	}
+
+	checksumCalculated += 8 * 0x0020 + receiveString[size - 2];
+
+	uint8_t message1[] = {checksumCalculated >> 8, checksumCalculated};
+	uint8_t message2[] = {checksum >> 8, checksum};
+
+	HAL_IRDA_Transmit(&hirda1, message1, 2, 50);
+	HAL_IRDA_Transmit(&hirda1, message2, 2, 50);
+
+	return checksum << 8 | checksumCalculated;
+}
 /* USER CODE END 0 */
 
 /**
@@ -88,37 +153,115 @@ int main(void)
   MX_GPIO_Init();
   MX_LoRaWAN_Init();
   /* USER CODE BEGIN 2 */
-  //For the trying bellow
-  uint8_t MSG[2] = {'\0'};
-  uint8_t MSG_ret[12];
-  //uint8_t X = 0;
+	MX_USART2_UART_Init();
+	MX_USART1_IRDA_Init();
 
-
-  //MX_USART2_UART_Init();
-  MX_USART1_IRDA_Init();
-  //HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET)
+	UTIL_TIMER_Create(&wakeUpSendTimer, 2000, UTIL_TIMER_PERIODIC, IRDA_Transmit_Wake_Up, NULL);
+	UTIL_TIMER_Start(&wakeUpSendTimer);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-		for(uint8_t i = 0; i<6; i++){
-		  HAL_Delay(500);
-		  sprintf(MSG, "A\r");
-		  HAL_IRDA_Transmit(&hirda1, MSG, sizeof(MSG), 100);
+	uint8_t returnCode = -1;
+	uint8_t message = -1;
+
+	// Start waking up the sensor
+	message = MESSAGE_WAKE_UP;
+
+	while (1) {
+		returnCode = IRDA_Receive(hirda1);
+
+		// Reception is complete
+		if (returnCode) {
+			// Get received content in string form, so that it can be compared
+			char receiveString[rxPointer];
+
+			strncpy(receiveString, rxBuffer, rxPointer);
+
+			// If message contains checksum
+			if (strstr(receiveString, "K23") != NULL) {
+				uint32_t result = IRDA_checksum(receiveString, rxPointer);
+
+				/*
+				 * ADD CODE FOR CHECKSUM
+				 */
+			}
+
+			// Once woken up, sensor will ask "what function" with "08?\r"
+			if (!strcmp(receiveString, "?08\r")) {
+				// Stop timer
+				UTIL_TIMER_Stop(&wakeUpSendTimer);
+
+				// Send request
+				uint8_t messageSend[] = "S\r";
+
+				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+
+				message = MESSAGE_START;
+			} else if (!strcmp(receiveString, "*\r")) {
+				// Acknowledge that there is a send request ("S")
+				if (message == MESSAGE_START) {
+					// Send first register value request
+					uint8_t messageSend[] = "F0017G0010\r";
+
+					HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+				}
+
+				// Acknowledge the end of transmission ("A", Abbruch)
+				if (message == MESSAGE_END) {
+					// Done, can go back to sleep
+				}
+			} else if (!strncmp(receiveString, "K85 00170010", 12)) {
+				// Register value requests
+				uint8_t messageSend[] = "F0017G0020\r";
+
+				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+			} else if (!strncmp(receiveString, "K85 00170020", 12)) {
+				uint8_t messageSend[] = "F0017G0030\r";
+
+				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+			} else if (!strncmp(receiveString, "K85 00170030", 12)) {
+				uint8_t messageSend[] = "F0017G0035\r";
+
+				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+			} else if (!strncmp(receiveString, "K85 00170035", 12)) {
+				uint8_t messageSend[] = "F0017G0036\r";
+
+				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+			} else if (!strncmp(receiveString, "K85 00170036", 12)) {
+				message = MESSAGE_END;
+
+				uint8_t messageSend[] = "F0017G0090\r";
+
+				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+			} else if (!strncmp(receiveString, "K85 00170090", 12)) {
+				// Last register value request
+				uint8_t messageSend[] = "A\r";
+
+				HAL_IRDA_Transmit(&hirda1, messageSend, sizeof(messageSend) - 1, 50);
+			} else {
+				/*
+				 * Not awaited reception handling goes here
+				 */
+			}
+
+			/*
+			 * CODE LORA - SEND
+			 */
+			//SendTxData();
+
+			rxPointer = 0;
 		}
 
-	    //HAL_IRDA_Receive(&hirda1, MSG_ret, sizeof(MSG_ret), 100);
-	    //APP_LOG(TS_ON,VLEVEL_M,"%d\r\n", MSG_ret);
-    /* USER CODE END WHILE */
-    //MX_LoRaWAN_Process();
+		//APP_LOG(TS_ON,VLEVEL_M,"%d\r\n", MSG_ret);
+
+		/* USER CODE END WHILE */
+		//MX_LoRaWAN_Process();
+	}
 
     /* USER CODE BEGIN 3 */
-		sprintf(MSG, Rx_Data[1]);
-		HAL_IRDA_Transmit(&hirda1, MSG, sizeof(MSG), 100);
-  }
-  /* USER CODE END 3 */
+
+	/* USER CODE END 3 */
 }
 
 /**
@@ -170,9 +313,9 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_IRDA_RxCpltCallback(IRDA_HandleTypeDef *hirda){
-	HAL_IRDA_Receive_IT(&hirda1, Rx_Data, 4 );
-}
+
+
+
 /* USER CODE END 4 */
 
 /**
